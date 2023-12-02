@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY FAVORITE SONG</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #music-player {
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        audio {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="music-player">
+    <h2>MY PLAYLIST </h2>
+    <audio id="audio" controls>
+        <source src="ruba.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <button id="playPauseBtn">Play/Pause</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const audio = document.getElementById('audio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+
+        playPauseBtn.addEventListener('click', function () {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.innerText = 'Pause';
+            } else {
+                audio.pause();
+                playPauseBtn.innerText = 'Play';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
