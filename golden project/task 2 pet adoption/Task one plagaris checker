@@ -1,0 +1,64 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk import FreqDist
+from nltk.stem import PorterStemmer
+from nltk.util import ngrams
+from difflib import SequenceMatcher
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def preprocess_text(text):
+    # Tokenize and remove stopwords
+    stop_words = set(stopwords.words('english'))
+    words = word_tokenize(text)
+    words = [word.lower() for word in words if word.isalnum() and word.lower() not in stop_words]
+
+    # Stemming using Porter Stemmer
+    ps = PorterStemmer()
+    words = [ps.stem(word) for word in words]
+
+    return words
+
+def get_ngrams(text, n):
+    # Generate n-grams from a given text
+    words = preprocess_text(text)
+    return list(ngrams(words, n))
+
+def jaccard_similarity(set1, set2):
+    # Calculate Jaccard similarity between two sets
+    intersection = len(set1.intersection(set2))
+    union = len(set1) + len(set2) - intersection
+    return intersection / union
+
+def text_similarity(text1, text2):
+    # Calculate text similarity using Jaccard similarity of trigrams
+    trigrams1 = set(get_ngrams(text1, 3))
+    trigrams2 = set(get_ngrams(text2, 3))
+    similarity = jaccard_similarity(trigrams1, trigrams2)
+    return similarity
+
+def similarity_score(text1, text2):
+    # Calculate similarity score using SequenceMatcher
+    sequence_matcher = SequenceMatcher(None, text1, text2)
+    return sequence_matcher.ratio()
+
+def plagiarism_checker(text1, text2, threshold=0.5):
+    # Check if the similarity score exceeds the threshold
+    similarity_jaccard = text_similarity(text1, text2)
+    similarity_ratio = similarity_score(text1, text2)
+
+    print(f"Jaccard Similarity: {similarity_jaccard}")
+    print(f"SequenceMatcher Ratio: {similarity_ratio}")
+
+    if similarity_jaccard > threshold or similarity_ratio > threshold:
+        print("Plagiarism detected!")
+    else:
+        print("No plagiarism detected.")
+
+# Example usage
+document1 = "This is a sample text for testing plagiarism detection."
+document2 = "A sample text for testing plagiarism detection with some variations."
+
+plagiarism_checker(document1, document2)
